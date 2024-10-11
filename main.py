@@ -12,7 +12,7 @@ from utils import readImage
 isTrain = False
 config = config(img_path=r'E:\python\basic_code\image_captioning\Images',
                 dataset_path=r'E:\python\basic_code\image_captioning\captions.txt',
-                base_net_name='vgg19',
+                base_net_name='densenet',
                 image_col_name='image',
                 caption_col_name='caption',
                 inp_shp=(224, 224, 3),
@@ -20,10 +20,13 @@ config = config(img_path=r'E:\python\basic_code\image_captioning\Images',
                 )
 
 if isTrain:
+    # prepare the data
     preprocessing = prep_data(config)
+    # initate the model and important parameter
     train_model = modelTrain(config, preprocessing,
                              num_of_epochs=50, batch_size=40)
     _ = train_model.initModelAndData()
+    # training the model and get the train model
     summ, finalM = train_model.trainModel()
 
     # validate the model
@@ -51,9 +54,9 @@ else:
     selected_file = select_file()
     # read the image
     image1 = readImage(selected_file, config.inp_shp)
-
+    # initiate the prediction class for prediction
     predic_class = makePrediction(config)
-
+    # provide the path of the test image
     text = predic_class.predict(selected_file)
     plt.figure(figsize=(60, 60))
 
